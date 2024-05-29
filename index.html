@@ -102,20 +102,30 @@
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     errorBtns[0].addEventListener('click', function() {
-      console.log('log in the console');
+      console.log('log this in the console');
     });
 
     errorBtns[1].addEventListener('click', function() {
-      console.error('error message');
+      console.error('you made an error');
     });
     
     errorBtns[2].addEventListener('click', function() {
-      console.count('count message');
+      console.count('keeping count');
     });
 
     errorBtns[3].addEventListener('click', function() {
-      console.dir('dir message');
+      console.warn('be careful! (warning)');
     });
+
+    errorBtns[4].addEventListener('click', function() {
+      console.assert('assert!');
+    });
+
+    errorBtns[5].addEventListener('click', function() {
+      console.clear();
+    });
+
+    
 
     // Start your code here
     // You may move this JS to another file if you wish
