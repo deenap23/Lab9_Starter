@@ -97,13 +97,25 @@
       let operator = document.querySelector('#operator').value;
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
+    
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     errorBtns[0].addEventListener('click', function() {
       console.log('log in the console');
     });
+
+    errorBtns[1].addEventListener('click', function() {
+      console.error('error message');
+    });
     
+    errorBtns[2].addEventListener('click', function() {
+      console.count('count message');
+    });
+
+    errorBtns[3].addEventListener('click', function() {
+      console.dir('dir message');
+    });
 
     // Start your code here
     // You may move this JS to another file if you wish
