@@ -84,9 +84,18 @@
       <button>End Timer</button>
       <button>Console Trace</button>
       <button>Trigger a Global Error</button>
+      <button>Random Failure (P4)</button>
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+    <script>
+      window.TrackJS && TrackJS.install({ 
+        token: "d48595ad245946049931e0627a67a4db"
+        // for more configuration options, see https://docs.trackjs.com
+      });
+    </script>
+                        
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -95,7 +104,15 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try{
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch (error){
+        console.error(error);
+        output.innerHTML = `input numerical values`;
+      } finally {
+        console.log("operation attempted");
+      }
+      
     });
     
 
@@ -118,14 +135,87 @@
     });
 
     errorBtns[4].addEventListener('click', function() {
-      console.assert('assert!');
+      console.assert(2==1);
     });
 
     errorBtns[5].addEventListener('click', function() {
       console.clear();
     });
 
+    errorBtns[6].addEventListener('click', function() {
+      console.dir(window);
+    });
     
+    errorBtns[7].addEventListener('click', function() {
+      console.dirxml(window);
+    });
+
+    errorBtns[8].addEventListener('click', function() {
+      console.group("Grouping demo");
+    });
+
+    errorBtns[9].addEventListener('click', function() {
+      console.groupEnd();
+    });
+
+    errorBtns[10].addEventListener('click', function() {
+      console.table(errorBtns);
+    });
+
+    errorBtns[11].addEventListener('click', function() {
+      console.time("Final Time");
+    });
+
+    errorBtns[12].addEventListener('click', function() {
+      console.timeEnd("Final Time");
+    });
+
+    errorBtns[13].addEventListener('click', function() {
+      console.trace();
+    });
+
+    class RandomError extends Error {
+      constructor(message) {
+        super(message); // (1)
+        this.name = "RandomErr"; // (2)
+      }
+    }
+    function generateRandFailure(){
+      if(Math.random()<0.4){
+        throw new RandomError("Error by Random Chance");
+      }
+    }
+    errorBtns[15].addEventListener('click', function() {
+      try{
+        generateRandFailure();
+        console.log("Success by Random Chance");
+      }catch(error){
+        console.error(error);
+      }
+
+    });
+
+    reportJSError = function(errorMessage,url,lineNumber){
+      console.log("An error happened");
+      TrackJS.track('Testing TrackJS!');
+    };
+
+    registerErrorHandler = function () 
+    {    
+        if (window.onerror) // then one exists
+          {
+          var oldError = window.onerror;
+          var newErrorHandler = function (errorMessage,url,lineNumber) { reportJSError(errorMessage,url,lineNumber); oldError(errorMessage,url,lineNumber); }
+          window.onerror = newErrorHandler;
+          }
+        else
+          window.onerror = reportJSError;
+    }
+
+    errorBtns[14].addEventListener('click', function() {
+      registerErrorHandler();
+      throw new Error("error");
+    });
 
     // Start your code here
     // You may move this JS to another file if you wish
